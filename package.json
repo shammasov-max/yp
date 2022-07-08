@@ -19,7 +19,11 @@
   "dependencies": {
     "@oclif/core": "^1",
     "@oclif/plugin-help": "^5",
-    "@oclif/plugin-plugins": "^2.0.1"
+    "@oclif/plugin-plugins": "^2.0.1",
+    "axios": "^0.27.2",
+    "download": "^8.0.0",
+    "playwright": "^1.23.2",
+    "ramda": "^0.28.0"
   },
   "devDependencies": {
     "@oclif/test": "^2",
