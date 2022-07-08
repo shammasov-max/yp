@@ -14,7 +14,7 @@ class Scrape extends lib_1.Command {
                 const src = list.pop();
                 const ext = '.jpg';
                 const current = this.index++;
-                await (0, downloadFile_1.default)(src, this.output, `${String(current).padStart(3, '0')}.${ext}`);
+                await (0, downloadFile_1.default)(src, this.output, `${String(current).padStart(3, '0')}${ext}`);
                 console.log(`File ${current} of ${this.images.length - 1} completed`);
             }
         };
