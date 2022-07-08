@@ -24,6 +24,7 @@
     "axios": "^0.27.2",
     "cli-ux": "^6.0.9",
     "download": "^8.0.0",
+    "playwright": "1.18",
     "ramda": "^0.28.0"
   },
   "devDependencies": {
