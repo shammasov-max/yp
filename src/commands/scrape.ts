@@ -1,5 +1,5 @@
-import {Command, Flags,} from '@oclif/core'
-
+import {Command, Flags,} from '@oclif/core/lib/'
+import {} from '@oclif/plugin-plugins'
 import grabImagesUrls from '../scrape/scrapeThePostersDB';
 import downloadFile from '../download/downloadFile';
 import { times } from 'lodash';
