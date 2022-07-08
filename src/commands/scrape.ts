@@ -4,6 +4,7 @@ import grabImagesUrls from '../scrape/scrapeThePostersDB';
 import downloadFile from '../download/downloadFile';
 import { times } from 'lodash';
 import CliUx from 'cli-ux/lib'
+import * as R from 'ramda'
 
 export default class Scrape extends Command {
   static description = 'Скачать файлы на печать из списка xls файла'
@@ -30,23 +31,24 @@ export default class Scrape extends Command {
     this.output = output
     this.images = (await grabImagesUrls(url, login, password)).filter(i => i!==undefined)
 
-    const result = await Promise.all(times(4, this.runWorker))
+    const chunks = R.splitEvery(Math.ceil(this.images.length/10), this.images)
+    const result = await Promise.all(chunks.map(c=> this.runWorker(c)))
+    console.log('Job is completed, your files are here '+process.cwd())
+    this.exit(0)
   }
   private index = 0
 
-  public runWorker = async (id: number) => {
-    const current = this.index
-    this.index++
-    if(current>=this.images.length)
-      return
-    const src = this.images[current]
+  public runWorker = async (list: string[]) => {
+    while(list.length) {
+    const src = list.pop()
     const ext = '.jpg'
-    console.log('Start loading file '+current)
-    await downloadFile(src, this.output, `${String(current).padStart(3,'0')}.${ext}`)
-    console.log(`File ${current} of ${this.images.length} completed`)
-    if(this.index < this.images.length) {
-      await this.runWorker(id)
-    }
+    const current = this.index++
+   
+    await downloadFile(src, this.output, `${String(current).padStart(3,'0')}${ext}`)
+    
+    console.log(`File ${current} of ${this.images.length-1} completed`)
+    
+  }
   }
 
 

@@ -15,5 +15,5 @@ export default class Scrape extends Command {
     private images;
     run(): Promise<void>;
     private index;
-    runWorker: (id: number) => Promise<void>;
+    runWorker: (list: string[]) => Promise<void>;
 }

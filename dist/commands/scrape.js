@@ -3,24 +3,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const lib_1 = require("@oclif/core/lib/");
 const scrapeThePostersDB_1 = require("../scrape/scrapeThePostersDB");
 const downloadFile_1 = require("../download/downloadFile");
-const lodash_1 = require("lodash");
 const lib_2 = require("cli-ux/lib");
+const R = require("ramda");
 class Scrape extends lib_1.Command {
     constructor() {
         super(...arguments);
         this.index = 0;
-        this.runWorker = async (id) => {
-            const current = this.index;
-            this.index++;
-            if (current >= this.images.length)
-                return;
-            const src = this.images[current];
-            const ext = '.jpg';
-            console.log('Start loading file ' + current);
-            await (0, downloadFile_1.default)(src, this.output, `${String(current).padStart(3, '0')}.${ext}`);
-            console.log(`File ${current} of ${this.images.length} completed`);
-            if (this.index < this.images.length) {
-                await this.runWorker(id);
+        this.runWorker = async (list) => {
+            while (list.length) {
+                const src = list.pop();
+                const ext = '.jpg';
+                const current = this.index++;
+                await (0, downloadFile_1.default)(src, this.output, `${String(current).padStart(3, '0')}.${ext}`);
+                console.log(`File ${current} of ${this.images.length - 1} completed`);
             }
         };
     }
@@ -30,7 +25,10 @@ class Scrape extends lib_1.Command {
         url = url || await lib_2.default.prompt('Введите адрес страницы с сайта thepostersdb.com для скрейпинга файлов');
         this.output = output;
         this.images = (await (0, scrapeThePostersDB_1.default)(url, login, password)).filter(i => i !== undefined);
-        const result = await Promise.all((0, lodash_1.times)(4, this.runWorker));
+        const chunks = R.splitEvery(Math.ceil(this.images.length / 10), this.images);
+        const result = await Promise.all(chunks.map(c => this.runWorker(c)));
+        console.log('Job is completed, your files are here ' + process.cwd());
+        this.exit(0);
     }
 }
 exports.default = Scrape;

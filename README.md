@@ -12,6 +12,7 @@ oclif example Hello World CLI
 <!-- toc -->
 * [Usage](#usage)
 * [Commands](#commands)
+* [yp](#yp)
 <!-- tocstop -->
 # Usage
 <!-- usage -->
@@ -20,7 +21,7 @@ $ npm install -g yp
 $ yp COMMAND
 running command...
 $ yp (--version)
-yp/0.0.0 linux-x64 node-v16.15.1
+yp/0.1.2 win32-x64 node-v16.14.2
 $ yp --help [COMMAND]
 USAGE
   $ yp COMMAND
@@ -41,6 +42,7 @@ USAGE
 * [`yp plugins:uninstall PLUGIN...`](#yp-pluginsuninstall-plugin-1)
 * [`yp plugins:uninstall PLUGIN...`](#yp-pluginsuninstall-plugin-2)
 * [`yp plugins update`](#yp-plugins-update)
+* [`yp scrape [URL] [OUTPUT] [LOGIN] [PASSWORD]`](#yp-scrape-url-output-login-password)
 
 ## `yp hello PERSON`
 
@@ -64,7 +66,7 @@ EXAMPLES
   hello friend from oclif! (./src/commands/hello/index.ts)
 ```
 
-_See code: [dist/commands/hello/index.ts](https://github.com/shammasov/hello-world/blob/v0.0.0/dist/commands/hello/index.ts)_
+_See code: [dist/commands/hello/index.ts](https://github.com/shammasov/hello-world/blob/v0.1.2/dist/commands/hello/index.ts)_
 
 ## `yp hello world`
 
@@ -331,5 +333,28 @@ FLAGS
 DESCRIPTION
   Update installed plugins.
 ```
+
+## `yp scrape [URL] [OUTPUT] [LOGIN] [PASSWORD]`
+
+Скачать файлы на печать из списка xls файла
+
+```
+USAGE
+  $ yp scrape [URL] [OUTPUT] [LOGIN] [PASSWORD]
+
+ARGUMENTS
+  URL       Адрес страницы на сайта https://theposterdb.com/
+  OUTPUT    [default: ./] Папка для размеения скаченных файлов
+  LOGIN     [default: shammasov]
+  PASSWORD  [default: Nq_mUmBrC8a@k4X]
+
+DESCRIPTION
+  Скачать файлы на печать из списка xls файла
+
+EXAMPLES
+  $ yp scrape https://theposterdb.com/posters/486 ./9999 Iron-Man
+```
+
+_See code: [dist/commands/scrape.ts](https://github.com/shammasov/hello-world/blob/v0.1.2/dist/commands/scrape.ts)_
 <!-- commandsstop -->
 # yp
