@@ -13,7 +13,6 @@ export default class Scrape extends Command {
     '$ yp scrape https://theposterdb.com/posters/486 ./9999 Iron-Man'
   ]
 
-
   static args = [
     {name: 'url',  description: 'Адрес страницы на сайта https://theposterdb.com/', default:undefined},
     {name: 'output', description: 'Папка для размеения скаченных файлов', default: './'},
@@ -43,11 +42,11 @@ export default class Scrape extends Command {
     const src = list.pop()
     const ext = '.jpg'
     const current = this.index++
-   
+
     await downloadFile(src, this.output, `${String(current).padStart(3,'0')}${ext}`)
-    
+
     console.log(`File ${current} of ${this.images.length-1} completed`)
-    
+
   }
   }
 

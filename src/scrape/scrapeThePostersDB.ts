@@ -1,30 +1,23 @@
-import {chromium} from 'playwright'
+import * as puppeteer from 'puppeteer'
 import {range, times} from 'ramda'
 const website = 'https://theposterdb.com'
 
 const grabImagesUrls = async (url:string, login:string, password:string) => {
-  const browser = await chromium.launch({headless: true})
 
-  const context = await browser.newContext()
+  const browser = await puppeteer.launch({headless: true});
+  const page = await browser.newPage();
+  await page.setViewport({width: 1200, height: 720});
+  await page.goto('https://theposterdb.com/login', { waitUntil: 'networkidle0' }); // wait until page load
+  await page.type('#login', login);
+  await page.type('#password', password);
+  // click and wait for navigation
+  await Promise.all([
+    page.click('body > main > div.container > div > div > div > div.card-body > form > div.form-group.mb-0.d-flex.flex-row.justify-content-between.flex-wrap > button'),
+    page.waitForNavigation({ waitUntil: 'networkidle0' }),
+  ]);
 
-  const page = await context.newPage()
-
-  // Navigate explicitly, similar to entering a URL in the browser.
-  await page.goto(website)
-  // Click text=Sign In
-  await page.locator('text=Sign In').click()
-  // Click [placeholder="Email Address \/ Username"]
-  await page.locator('[placeholder="Email Address \\/ Username"]').click()
-  // Fill [placeholder="Email Address \/ Username"]
-  await page.locator('[placeholder="Email Address \\/ Username"]').fill(login)
-  // Press Tab
-  await page.locator('[placeholder="Email Address \\/ Username"]').press('Tab')
-  // Fill [placeholder="Password"]
-  await page.locator('[placeholder="Password"]').fill(password)
-  // Click button:has-text("Sign In")
-  await page.locator('button:has-text("Sign In")').click()
   let allPics: string[] = []
-  const pagesInParallel = 3
+  const pagesInParallel = 1
   const pages = [
     page,
 
@@ -32,14 +25,15 @@ const grabImagesUrls = async (url:string, login:string, password:string) => {
   while(pages.length < pagesInParallel) {
 
 
-    pages.push(await context.newPage())
+    pages.push(await browser.newPage())
   }
   // Go to https://theposterdb.com/posters/486
   const loadSubPage = async (index: number) => {
     const page = pages[index % pagesInParallel]
-    await page.goto(`${url}?page=${index}`)
-    const elements = await page.$$('[title="Download Poster"]')
-    const pics = await Promise.all(elements.map(a => a.getAttribute('href')))
+    await page.goto(`${url}?page=${index}`, {waitUntil:'networkidle0'})
+    const hrefs = await page.$$eval('a', as => as.map(a => a.href))
+    //https://theposterdb.com/api/assets/5913/download?performed_by=shammasov
+    const pics = hrefs.filter(h => h.endsWith('download?performed_by=shammasov'))
     console.log('Check page ' + index)
     return pics
   }
