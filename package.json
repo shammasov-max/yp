@@ -20,7 +20,7 @@
     "@oclif/core": "^1",
     "@oclif/plugin-help": "^5",
     "@oclif/plugin-plugins": "^2.0.1",
-    "@types/ramda": "^0.28.14",
+    "@types/ramda": "^0.28.15",
     "axios": "^0.27.2",
     "cli-ux": "^6.0.9",
     "download": "^8.0.0",
