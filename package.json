@@ -24,7 +24,7 @@
     "axios": "^0.27.2",
     "cli-ux": "^6.0.9",
     "download": "^8.0.0",
-    "makensis": "^1.1.3",
+    "makensis": "^1.1.7",
     "puppeteer": "^15.3.2",
     "ramda": "^0.28.0"
   },
